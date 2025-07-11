@@ -1,14 +1,12 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Restaurants.Application.Restaurants.Dtos;
 
-namespace Restaurants.Application.Restaurants.Validators;
+namespace Restaurants.Application.Restaurants.Commands.CreateRestaurant;
 
-public class CreateRestaurantsDtoValidator :AbstractValidator<CreateRestaurantDto>
+public class CreateRestaurantCommandValidator :AbstractValidator<CreateRestaurantCommand>
 {
     private readonly List<string> validCategories = ["Italian", "Mexican", "Japanese", "American", "Indian"];
 
-    public CreateRestaurantsDtoValidator()
+    public CreateRestaurantCommandValidator()
     {
         RuleFor(r=>r.Name)
             .Length(3,100)

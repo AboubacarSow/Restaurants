@@ -9,3 +9,7 @@ GET
 GET {{Restaurants.API_HostAddress}}/api/restaurants
 
 ###
+
+GET {{Restaurants.API_HostAddress}}/api/restaurants/5
+
+###

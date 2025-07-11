@@ -9,12 +9,12 @@ public static class ServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IRestaurantsService, RestaurantsService>();
         //services.AddAutoMapper(typeof(AssemblyReference).Assembly);
         services.AddAutoMapper(cfg => cfg.AddMaps(typeof(AssemblyReference).Assembly)); //version 15.0.1 et plus(j'imagine)
 
         services.AddFluentValidationAutoValidation()
                 .AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
       
+        services.AddMediatR(config=>config.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly));
     }
 }

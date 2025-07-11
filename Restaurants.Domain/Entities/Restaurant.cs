@@ -7,7 +7,6 @@ public  class Restaurant
     public string Description { get; set; }=default!;
     public string Category {  get; set; } = default!;
     public bool HasDelivery {  get; set; }
-
     public string ContactEmail { get; set; } = default!;
     public string ContactNumber {  get; set; } = default!;
 

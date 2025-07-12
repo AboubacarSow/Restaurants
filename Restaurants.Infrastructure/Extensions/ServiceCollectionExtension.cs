@@ -16,7 +16,7 @@ public static class ServiceCollectionExtension
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             Options.UseSqlServer(connectionString)
-            .EnableSensitiveDataLogging();
+            .EnableSensitiveDataLogging();// This method allows us to see sensitive data in our log
 
         });
         services.AddScoped<IRestaurantConfig, RestaurantConfig>();

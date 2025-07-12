@@ -10,7 +10,7 @@ public class UpdateRestaurantCommandHandler(IRestaurantsRepository _restaurantsR
 {
     public async Task<bool> Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Editing restaurant with Id: {request.Id}");
+        _logger.LogInformation("Editing restaurant with Id: {RestaurantId} and new one: {@NewRestaurant}",request.Id,request);
         var restaurant = await _restaurantsRepository.GetOneRestaurantByIdAsync(request.Id,true);
         if(restaurant == null ) 
             return false;

@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Restaurants.Commands.CreateRestaurant;
 using Restaurants.Application.Restaurants.Commands.DeleteRestaurant;
 using Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
+using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Restaurants.API.Controllers;
@@ -15,6 +17,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
 {
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(IEnumerable<RestaurantDto>))]
     public async Task<IActionResult> GetAll()
     {
         var restaurants = await _mediator.Send(new GetAllRestaurantsQuery(false));
@@ -22,6 +25,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
 
     }
     [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(RestaurantDto))]
     public async Task<IActionResult> Get([FromRoute]int id)
     {
         var restaurant=await _mediator.Send(new GetRestaurantByIdQuery(id,false));
@@ -31,12 +35,15 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateRestaurant( CreateRestaurantCommand model)
     {
         var id=await _mediator.Send(model);
         return CreatedAtAction(nameof(Get), new {id},null);
     }
     [HttpPatch("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> EditRestaurant(int id,UpdateRestaurantCommand model)
     {
         var isEdited= await _mediator.Send(model);
@@ -44,6 +51,8 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteRestaurant(int id)
     {
         var result = await _mediator.Send(new DeleteRestaurantCommand(id));

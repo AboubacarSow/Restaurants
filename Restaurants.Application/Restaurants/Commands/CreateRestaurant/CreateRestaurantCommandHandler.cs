@@ -3,12 +3,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restaurants.Commands.CreateRestaurant;
 
@@ -17,7 +11,7 @@ ILogger<CreateRestaurantCommandHandler> _logger, IMapper _mapper) : IRequestHand
 {
     public async Task<int> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Adding a new restaurant item");
+        _logger.LogInformation("Adding a new restaurant item: {@Restaurant}",request);
         var restaurant = _mapper.Map<Restaurant>(request);
         var id = await restaurantsRepository.CreateAsync(restaurant);
         return id;

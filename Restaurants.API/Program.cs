@@ -35,6 +35,7 @@ builder.Services.AddSwaggerGen();
 
 // DI Container - Extensions Methods calls
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
@@ -46,6 +47,7 @@ var seeder = scope.ServiceProvider.GetRequiredService<IRestaurantConfig>();
 await seeder.SeedAsync();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeLoggingMiddleware>();
 
 app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment())

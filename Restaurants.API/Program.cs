@@ -1,4 +1,5 @@
-﻿using Restaurants.API.Middleware;
+﻿using Microsoft.OpenApi.Models;
+using Restaurants.API.Middleware;
 using Restaurants.Application.Extensions;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Extensions;
@@ -32,7 +33,33 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Type=SecuritySchemeType.Http,
+        Scheme="bearer",
+        In=ParameterLocation.Header,
+        Name="Authorization"
+    });
+    s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference= new OpenApiReference()
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                },
+                Name="Authorization",
+                In=ParameterLocation.Header,
+                Scheme="bearer"
+            },
+            []
+        }
+    });
+});
 
 // DI Container - Extensions Methods calls
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
@@ -64,7 +91,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<User>();
+app.MapGroup("api/identity")
+    .MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();

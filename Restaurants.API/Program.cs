@@ -1,5 +1,6 @@
 ﻿using Restaurants.API.Middleware;
 using Restaurants.Application.Extensions;
+using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
 using Serilog;
@@ -39,6 +40,11 @@ builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+//Inside my Program.cs - API layer
+builder.Services.AddIdentityApiEndpoints<User>();
+
+
+
 var app = builder.Build();
 
 //Seeding Restaurant Data
@@ -58,6 +64,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();

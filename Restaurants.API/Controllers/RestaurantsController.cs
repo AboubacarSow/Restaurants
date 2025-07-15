@@ -6,8 +6,6 @@ using Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
 using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Restaurants.API.Controllers;
 
@@ -44,6 +42,8 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> EditRestaurant(int id,UpdateRestaurantCommand model)
     {
+        if (id != model.Id)
+            return BadRequest(new { Message = "The given Id and the model id do not matched" });
          await _mediator.Send(model);
         return NoContent();
     }

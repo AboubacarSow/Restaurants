@@ -1,7 +1,6 @@
-﻿namespace Restaurants.Application.Users
+﻿namespace Restaurants.Application.Users;
+
+public interface IUserContext
 {
-    public interface IUserContext
-    {
-        CurrentUser? GetCurrentUser();
-    }
+    CurrentUser? GetCurrentUser();
 }

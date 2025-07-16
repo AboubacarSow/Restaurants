@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Restaurants.API.Extensions;
 using Restaurants.API.Middleware;
 using Restaurants.Application.Extensions;
 using Restaurants.Domain.Entities;
@@ -26,49 +27,10 @@ builder.Host.UseSerilog((context, configuration) =>
     //.WriteTo.File(path:"Logs/Restaurant-API-.log", rollingInterval: RollingInterval.Day,rollOnFileSizeLimit:true)//default size:1GB
     //.WriteTo.Console(outputTemplate :"[{Timestamp:dd:HH:mm:ss} {Level:u3}] {Message:lj} |{SourceContext} | {NewLine}{Exception}");
 });
-
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(s =>
-{
-    s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Type=SecuritySchemeType.Http,
-        Scheme="bearer",
-        In=ParameterLocation.Header,
-        Name="Authorization"
-    });
-    s.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-        {
-            new OpenApiSecurityScheme()
-            {
-                Reference= new OpenApiReference()
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                },
-                Name="Authorization",
-                In=ParameterLocation.Header,
-                Scheme="bearer"
-            },
-            []
-        }
-    });
-});
-
-// DI Container - Extensions Methods calls
-builder.Services.AddScoped<ErrorHandlingMiddleware>();
-builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
+builder.Services.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-//Inside my Program.cs - API layer
-builder.Services.AddIdentityApiEndpoints<User>();
 
 
 
@@ -92,6 +54,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGroup("api/identity")
+    .WithTags("Identity")
     .MapIdentityApi<User>();
 app.UseAuthorization();
 

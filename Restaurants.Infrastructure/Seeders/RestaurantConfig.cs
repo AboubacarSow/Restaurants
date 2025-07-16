@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Persistence;
 
@@ -16,7 +18,24 @@ internal class RestaurantConfig(RestaurantsDbContext _context) : IRestaurantConf
                  _context.Restaurants.AddRange(restaurants);
                 await _context.SaveChangesAsync();
             }
+            if(!_context.Roles.Any())
+            {
+                var roles= GetRoles();
+                _context.Roles.AddRange(roles);
+                await _context.SaveChangesAsync();
+            }
         }
+    }
+
+    private static IEnumerable<IdentityRole> GetRoles()
+    {
+        IEnumerable<IdentityRole> roles =
+            [
+                new(){Name=UserRoles.User,NormalizedName=UserRoles.User.ToUpper()},
+                new(){Name=UserRoles.Owner,NormalizedName=UserRoles.Owner.ToUpper()},
+                new() { Name = UserRoles.Admin, NormalizedName = UserRoles.Admin.ToUpper() },
+            ];
+        return roles;
     }
 
     private IEnumerable<Restaurant> GetRestaurants()

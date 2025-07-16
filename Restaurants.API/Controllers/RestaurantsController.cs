@@ -7,16 +7,18 @@ using Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
 using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
+using Restaurants.Domain.Constants;
 
 namespace Restaurants.API.Controllers;
 
 [ApiController]// What does do this decoration attribute?
 [Route("api/restaurants")]
+[Authorize]
 public class RestaurantsController(IMediator _mediator) : ControllerBase
 {
 
     [HttpGet]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(IEnumerable<RestaurantDto>))]
     public async Task<IActionResult> GetAll()
     {
@@ -34,6 +36,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [Authorize(Roles =UserRoles.Owner)]
     public async Task<IActionResult> CreateRestaurant( CreateRestaurantCommand model)
     {
         var id=await _mediator.Send(model);
@@ -42,6 +45,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Roles =UserRoles.Admin)]
     public async Task<IActionResult> EditRestaurant(int id,UpdateRestaurantCommand model)
     {
         if (id != model.Id)
@@ -53,6 +57,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Roles =UserRoles.Admin)]
     public async Task<IActionResult> DeleteRestaurant(int id)
     {
        await _mediator.Send(new DeleteRestaurantCommand(id));

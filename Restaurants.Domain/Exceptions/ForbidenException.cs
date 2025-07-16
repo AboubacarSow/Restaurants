@@ -1,6 +1,6 @@
 namespace Restaurants.Domain.Exceptions;
 
-public class ForbidenException: Exception
+public class ForbidenException(string userIdentifier,string resourceOperation)
+    : Exception($"This user :{userIdentifier} is not authorize to perform the [{resourceOperation}] operation")
 {
-    public ForbidenException(string message): base(message){}
 }

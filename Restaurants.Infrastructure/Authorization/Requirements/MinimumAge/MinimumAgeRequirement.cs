@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Restaurants.Infrastructure.Authorization.Requirements;
+namespace Restaurants.Infrastructure.Authorization.Requirements.MinimumAge;
 
 public  class MinimumAgeRequirement(int minimumAge) :IAuthorizationRequirement
 {

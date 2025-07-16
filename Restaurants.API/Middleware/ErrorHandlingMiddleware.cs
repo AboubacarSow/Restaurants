@@ -21,6 +21,16 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> _logger) :
                 message = notFoud.Message
             });
         }
+        catch (ForbidenException forbiden)
+        {
+            _logger.LogWarning("{Message}", forbiden.Message);
+           context.Response.StatusCode=StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                statusCode = context.Response.StatusCode,
+                message = forbiden.Message
+            });
+        }
         catch (Exception ex)
         {
             _logger.LogError("Something went wrong:{Message}",ex.Message);

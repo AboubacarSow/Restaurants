@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Restaurants.Application.Users;
 
-namespace Restaurants.Infrastructure.Authorization.Requirements;
+namespace Restaurants.Infrastructure.Authorization.Requirements.MinimumAge;
 
 public class MinimumAgeRequirementHandler(IUserContext _userContext,ILogger<MinimumAgeRequirementHandler> _logger)
     : AuthorizationHandler<MinimumAgeRequirement>

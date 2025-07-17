@@ -17,7 +17,9 @@ ILogger<GetAllRestaurantsQueryHandler> _logger, IMapper _mapper) : IRequestHandl
             .GetAllWithMatchingAsync(request.SearchTerm,
                                     request.PageSize,
                                     request.PageNumber,
-                                    trackChanges: request.TrackChanges);
+                                    request.SortBy,
+                                    request.SortDirection,
+                                     request.TrackChanges);
         var restaurantDtos=_mapper.Map<IEnumerable<RestaurantDto>>(restaurantsWithPagedList);
         var metaData=restaurantsWithPagedList.MetaData;
         return (restaurantDtos,metaData);

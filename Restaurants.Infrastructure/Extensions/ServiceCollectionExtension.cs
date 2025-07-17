@@ -36,13 +36,15 @@ public static class ServiceCollectionExtension
             .AddClaimsPrincipalFactory<RestaurantsUserClaimPrincipalFactory>() //this is a custom claim which wiht we have inside of it plus default claims user Nationality and Date of Birth
             .AddEntityFrameworkStores<RestaurantsDbContext>();
 
+
         services.AddAuthorizationBuilder()
                 .AddPolicy(PolicyNames.HasNationality,
                 builder => builder.RequireClaim(AppClaimTypes.Nationality))
                 .AddPolicy(PolicyNames.AtLeast20,
                 builder =>builder.AddRequirements(new MinimumAgeRequirement(20)))
                 .AddPolicy(PolicyNames.CreatedAtLeast2Restaurants,
-                builder=>builder.AddRequirements(new CreatedMultipleRestaurantsRequirement(2));
+                builder=>builder.AddRequirements(new CreatedMultipleRestaurantsRequirement(2)));
+
 
         services.AddScoped<IAuthorizationHandler,MinimumAgeRequirementHandler>();
         services.AddScoped<IAuthorizationHandler,CreatedMultipleRestaurantsRequirementHandler>();

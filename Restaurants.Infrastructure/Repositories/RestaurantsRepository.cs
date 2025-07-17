@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Restaurants.Domain.Entities;
+using Restaurants.Domain.Entities.RequestFeatures;
 using Restaurants.Domain.Repositories;
+using Restaurants.Infrastructure.Extensions.Restaurants;
 using Restaurants.Infrastructure.Persistence;
 
 namespace Restaurants.Infrastructure.Repositories;
@@ -30,6 +32,23 @@ internal class RestaurantsRepository(RestaurantsDbContext _context) : IRestauran
                 :await _context.Restaurants
                             .Include(r => r.Dishes)
                             .ToListAsync();
+    }
+
+    public async Task<PagedList<Restaurant>> GetAllWithMatchingAsync(string? searchTerm,
+        int pageSize,int pageNumber,
+        string? sortBy,SortDirection? sortDirection,
+        bool trackChanges)
+    {
+        var query = !trackChanges
+            ? _context.Restaurants.AsNoTracking().Include(r => r.Dishes)
+            : _context.Restaurants.AsNoTracking();
+
+        var restaurants =await query
+            .SearchRestaurants(searchTerm)
+            .SortRestaurants(sortBy,sortDirection)
+            .ToListAsync();
+
+        return PagedList<Restaurant>.ToPagedList(restaurants, pageSize, pageNumber);
     }
 
     public async Task<Restaurant?> GetOneRestaurantByIdAsync(int id, bool trackChanges)

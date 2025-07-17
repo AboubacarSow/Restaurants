@@ -8,6 +8,7 @@ using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
 using Restaurants.Domain.Constants;
+using System.Text.Json;
 
 namespace Restaurants.API.Controllers;
 
@@ -20,9 +21,10 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(IEnumerable<RestaurantDto>))]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] GetAllRestaurantsQuery query)
     {
-        var restaurants = await _mediator.Send(new GetAllRestaurantsQuery(false));
+        var (restaurants,metaData)= await _mediator.Send(query);
+        Response.Headers["X-Pagination"]=JsonSerializer.Serialize(metaData);
         return Ok(restaurants);
 
     }

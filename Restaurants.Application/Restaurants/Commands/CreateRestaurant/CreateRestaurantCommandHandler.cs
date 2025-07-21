@@ -20,7 +20,7 @@ IMapper _mapper,IUserContext _userContext) : IRequestHandler<CreateRestaurantCom
         _logger.LogInformation("{UserEmail} [{UserId}] is creating a new restaurant {@Request}",
             user!.Email,
             user.Id,
-            request);
+            request);  
         var restaurant = _mapper.Map<Restaurant>(request);
         restaurant.OwnerId=user!.Id;
         if (!_restaurantAuthorizationService.Authorize(restaurant, ResourceOperation.Create))

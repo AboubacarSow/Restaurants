@@ -98,5 +98,21 @@ public class CreateRestaurantCommandValidatorTests
         result.ShouldHaveValidationErrorFor(c => c.Category);
 
     }
+    [Theory]
+    [InlineData("10220")]
+    [InlineData("102-20")]
+    [InlineData("10 220")]
+    [InlineData("10-2 20")]
+    public void Validator_ForInvalidPostalCode_ShouldHaveValidationErrorsForPostalCodeProperty(string postalCode)
+    {
+        var command = new CreateRestaurantCommand { PostalCode = postalCode };
+
+        var validator = new CreateRestaurantCommandValidator();
+        var result= validator.TestValidate(command);
+
+        result.ShouldHaveValidationErrorFor(r=>r.PostalCode);
+    }
+
+   
 
 }

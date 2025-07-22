@@ -28,5 +28,8 @@ public class RestaurantAutoMapper :Profile
                 src => (src.Address == null) ? null : src.Address.Street))
             .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(
                 src => (src.Address == null) ? null : src.Address.PostalCode));
+
+        CreateMap<UpdateRestaurantCommand, Restaurant>();
     }
+
 }

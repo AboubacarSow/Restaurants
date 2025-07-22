@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Castle.Core.Logging;
+﻿
+using AutoMapper;
 using FluentAssertions;
 using Moq;
 using Restaurants.Application.Restaurants.Dtos;
@@ -11,20 +11,18 @@ namespace Restaurants.Application.Tests.Restaurants.Dtos;
 public class RestaurantAutoMapperTests
 {
 
-    private IMapper _mapper;
-
-    public RestaurantAutoMapperTests()
-    {
-        var configuration = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<RestaurantsProfile>();
-        });
-        _mapper = configuration.CreateMapper();
-    }
+    
     [Fact()]
     public void CreateMap_RestaurantToRestaurantDto_MapsCorrectly()
     {
-        //Arrangment
+        // Arrange
+        var configuration = new MapperConfiguration(config =>
+        {
+            config.AddProfile(new RestaurantAutoMapper());
+        });
+
+        var mapper = configuration.CreateMapper();
+
         var restaurant = new Restaurant()
         {
             Id = 1,
@@ -42,23 +40,18 @@ public class RestaurantAutoMapperTests
             }
         };
 
-
         // Act
-        var restaurantDto= _mapper.Map<RestaurantDto>(restaurant);
+        var restaurantDto = mapper.Map<RestaurantDto>(restaurant);
 
         // Assert
-        //First Check that restaurantDto is not nulll
-
-
-        restaurantDto.Should().NotBeNull(); 
+        restaurantDto.Should().NotBeNull();
         restaurantDto.Id.Should().Be(restaurant.Id);
-        restaurantDto.Name.Should().Be(restaurant.Name);    
+        restaurantDto.Name.Should().Be(restaurant.Name);
         restaurantDto.Description.Should().Be(restaurant.Description);
         restaurantDto.HasDelivery.Should().Be(restaurant.HasDelivery);
         restaurantDto.ContactEmail.Should().Be(restaurant.ContactEmail);
         restaurantDto.City.Should().Be(restaurant.Address.City);
         restaurantDto.Street.Should().Be(restaurant.Address?.Street);
-        restaurantDto.PostalCode.Should().Be(restaurantDto?.PostalCode);
-
+        restaurantDto.PostalCode.Should().Be(restaurant.Address?.PostalCode);
     }
 }

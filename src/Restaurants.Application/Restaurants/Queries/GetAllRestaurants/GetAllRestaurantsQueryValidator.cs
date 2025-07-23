@@ -15,17 +15,17 @@ public class GetAllRestaurantsQueryValidator : AbstractValidator<GetAllRestauran
 
     public GetAllRestaurantsQueryValidator()
     {
-        RuleFor(q => q.PageNumber)
+        RuleFor(q => q.pageNumber)
             .GreaterThanOrEqualTo(1)
-            .WithMessage("PageNumber must be greater or equal to 1");
-        RuleFor(q => q.PageSize)
+            .WithMessage("pageNumber must be greater or equal to 1");
+        RuleFor(q => q.pageSize)
             .Must(value => allowedPageSizes.Contains(value))
             .WithMessage($"PagSize mut be in [{String.Join(',',allowedPageSizes.Select(r=>r.ToString()))}]");
 
-        RuleFor(r => r.SortBy)
+        RuleFor(r => r.sortBy)
             .Must(value => allowedSortByColumns.Contains(value))
-            .When(r => r.SortBy != null)
-            .WithMessage($"SortBy is optional - or must be in [{String.Join(',', allowedSortByColumns.Select(r => r.ToString()))}] ");
+            .When(r => r.sortBy != null)
+            .WithMessage($"sortBy is optional - or must be in [{String.Join(',', allowedSortByColumns.Select(r => r.ToString()))}] ");
    
     }
 }

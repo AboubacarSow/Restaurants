@@ -61,3 +61,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+//To make "Program" visible inside of our tests
+public partial class Program { }

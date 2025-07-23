@@ -11,14 +11,14 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> _logger) :
         {
             await  next.Invoke(context);
         }
-        catch(NotFoundException notFoud)
+        catch(NotFoundException notFoundException)
         {
-            _logger.LogWarning("Resource not found:{@Resource}",notFoud.Message);
+            _logger.LogWarning("Resource not found:{@Resource}",notFoundException.Message);
             context.Response.StatusCode=StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new
             {
                 statusCode = context.Response.StatusCode,
-                message = notFoud.Message
+                message = notFoundException.Message
             });
         }
         catch (ForbidenException forbiden)

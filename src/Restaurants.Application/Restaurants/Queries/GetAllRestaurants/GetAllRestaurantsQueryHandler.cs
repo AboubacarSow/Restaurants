@@ -14,12 +14,12 @@ ILogger<GetAllRestaurantsQueryHandler> _logger, IMapper _mapper) : IRequestHandl
     {
         _logger.LogInformation("Getting All Restaurants");
         var restaurantsWithPagedList = await restaurantsRepository
-            .GetAllWithMatchingAsync(request.SearchTerm,
-                                    request.PageSize,
-                                    request.PageNumber,
-                                    request.SortBy,
-                                    request.SortDirection,
-                                     request.TrackChanges);
+            .GetAllWithMatchingAsync(request.searchTerm,
+                                    request.pageSize,
+                                    request.pageNumber,
+                                    request.sortBy,
+                                    request.sortDirection,
+                                     request.trackChanges);
         var restaurantDtos=_mapper.Map<IEnumerable<RestaurantDto>>(restaurantsWithPagedList);
         var metaData=restaurantsWithPagedList.MetaData;
         return (restaurantDtos,metaData);

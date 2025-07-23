@@ -1,5 +1,8 @@
 {
   "Serilog": {
+    "Using": [
+      "Serilog.Sinks.ApplicationInsights"
+    ],
     "MinimumLevel": {
       "Default": "Information",
       "Override": {
@@ -21,6 +24,12 @@
           "rollingInterval": "Day",
           "rollOnFileSizeLimit": true,
           "formatter": "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
+        }
+      },
+      {
+        "Name": "ApplicationInsights",
+        "Args": {
+          "telemetryConverter": "Serilog.Sinks.ApplicationInsights.TelemetryConverters.TraceTelemetryConverter, Serilog.Sinks.ApplicationInsights"
         }
       }
     ]

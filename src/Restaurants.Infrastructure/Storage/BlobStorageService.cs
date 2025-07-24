@@ -15,7 +15,7 @@ namespace Restaurants.Infrastructure.Storage;
 
 internal class BlobStorageService(IOptions<BlobStorageSettings> blobStorage) : IBlobStorageService
 {
-    private readonly BlobStorageSettings _blobStorageSettings= blobStorage.Value;
+    private readonly BlobStorageSettings _blobStorageSettings = blobStorage.Value;
     public async Task<string> UploadToBlogAsync(Stream data, string FileName)
     {
         //Getting a blobserviceclient
@@ -24,19 +24,19 @@ internal class BlobStorageService(IOptions<BlobStorageSettings> blobStorage) : I
         var containerClient = blobServiceClient.GetBlobContainerClient(_blobStorageSettings.LogosContainerName);
 
         //Get Blob Client
-        var blobClient= containerClient.GetBlobClient(FileName);
+        var blobClient = containerClient.GetBlobClient(FileName);
 
         //Upload file
         await blobClient.UploadAsync(data);
 
         //Get Url
-        var blobUrl =  blobClient.Uri.ToString();
+        var blobUrl = blobClient.Uri.ToString();
         return blobUrl;
     }
 
-    public string? GetBlobSasUrl(string blobUrl)
+    public string? GetBlobSasUrl(string? blobUrl)
     {
-        if(string.IsNullOrEmpty(blobUrl)) return null;
+        if (string.IsNullOrEmpty(blobUrl)) return null;
 
         //Get BlobSasBuilder
         var sasBuilder = new BlobSasBuilder()
@@ -49,7 +49,7 @@ internal class BlobStorageService(IOptions<BlobStorageSettings> blobStorage) : I
         };
 
         //Specifying the permission
-        sasBuilder.SetPermissions(BlobAccountSasPermissions.Read);
+        sasBuilder.SetPermissions(BlobSasPermissions.Read);
 
         //Get SasToken
         var sasToken = sasBuilder

@@ -49,12 +49,12 @@ try
     app.UseMiddleware<RequestTimeLoggingMiddleware>();
 
     app.UseSerilogRequestLogging();
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
+   
+    app.UseSwagger();
+    app.UseSwaggerUI();
+   
+    app.UseResponseCaching();
+    app.UseHttpCacheHeaders();
     app.UseHttpsRedirection();
 
     app.MapGroup("api/identity")

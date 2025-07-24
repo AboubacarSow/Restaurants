@@ -1,8 +1,9 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Restaurants.API.Middleware;
 using Restaurants.Domain.Entities;
-using Restaurants.Infrastructure.Authorization;
-using Restaurants.Infrastructure.Authorization.Requirements;
 
 namespace Restaurants.API.Extensions;
 
@@ -13,7 +14,10 @@ public static class ServiceCollectionExtensions
        
         // Add services to the container.
 
-        services.AddControllers();
+        services.AddControllers(config=>
+        {
+            config.CacheProfiles.Add("3mins",new CacheProfile() { Duration=180});
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s =>
@@ -47,9 +51,30 @@ public static class ServiceCollectionExtensions
         // DI Container - Extensions Methods calls
         services.AddScoped<ErrorHandlingMiddleware>();
         services.AddScoped<RequestTimeLoggingMiddleware>();
-      
-        //Inside my Program.cs - API layer
-        services.AddIdentityApiEndpoints<User>();
+
+
+     //Configure Caching
+     services.AddResponseCaching();
+
+      services.AddHttpCacheHeaders(expressionOptions =>
+      {
+          expressionOptions.CacheLocation = CacheLocation.Public;
+          expressionOptions.MaxAge = 100;
+      },
+      validations =>
+      {
+          validations.MustRevalidate = false;
+      });
+
+        // Configure Api Versioning
+        services.AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+        });
+      //Inside my Program.cs - API layer
+      services.AddIdentityApiEndpoints<User>();
     
     }
 }

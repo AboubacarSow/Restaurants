@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Marvin.Cache.Headers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Restaurants.Commands.CreateRestaurant;
@@ -10,12 +11,13 @@ using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
 using Restaurants.Domain.Constants;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Restaurants.API.Controllers;
 
 [ApiController]// What does do this decoration attribute?
 [Route("api/restaurants")]
+//[ResponseCache(CacheProfileName = "3mins")]
+[HttpCacheExpiration(CacheLocation =CacheLocation.Public,MaxAge =80)]
 [Authorize]
 public class RestaurantsController(IMediator _mediator) : ControllerBase
 {
@@ -23,6 +25,7 @@ public class RestaurantsController(IMediator _mediator) : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(IEnumerable<RestaurantDto>))]
+    [ResponseCache(Duration =300)]
     public async Task<IActionResult> GetAll([FromQuery] GetAllRestaurantsQuery query)
     {
         var (restaurants,metaData)= await _mediator.Send(query);

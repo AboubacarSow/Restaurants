@@ -25,7 +25,7 @@ public static class ServiceCollectionExtension
     {
         services.AddDbContext<RestaurantsDbContext>(Options =>
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("RestaurantsDb");
             Options.UseSqlServer(connectionString)
             .EnableSensitiveDataLogging();// This method allows us to see sensitive data in our log
 

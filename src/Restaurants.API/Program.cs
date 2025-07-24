@@ -6,6 +6,7 @@ using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
 using Serilog;
+using Microsoft.Extensions.Azure;
 
 
 try

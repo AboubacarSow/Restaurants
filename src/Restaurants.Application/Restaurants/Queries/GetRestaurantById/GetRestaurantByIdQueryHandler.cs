@@ -12,7 +12,8 @@ using Restaurants.Domain.Repositories;
 namespace Restaurants.Application.Restaurants.Queries.GetRestaurantById;
 
 public class GetRestaurantByIdQueryHandler(IRestaurantsRepository restaurantsRepository,IRestaurantAuthorizationService _restaurantAuthService,
-ILogger<GetRestaurantByIdQueryHandler> _logger, IMapper _mapper,IUserContext _userContext) : IRequestHandler<GetRestaurantByIdQuery, RestaurantDto>
+ILogger<GetRestaurantByIdQueryHandler> _logger, IMapper _mapper,IUserContext _userContext,
+IBlobStorageService _blobStorageService) : IRequestHandler<GetRestaurantByIdQuery, RestaurantDto>
 {
     public async Task<RestaurantDto> Handle(GetRestaurantByIdQuery request, CancellationToken cancellationToken)
     {
@@ -22,6 +23,8 @@ ILogger<GetRestaurantByIdQueryHandler> _logger, IMapper _mapper,IUserContext _us
         ?? throw new NotFoundException(nameof(Restaurant), request.Id.ToString());
         if(!_restaurantAuthService.Authorize(restaurant,ResourceOperation.Read))
             throw new ForbidenException(user.Email,ResourceOperation.Read.ToString());  
-        return _mapper.Map<RestaurantDto>(restaurant);
+        var restaurantDto= _mapper.Map<RestaurantDto>(restaurant);
+        restaurantDto.LogoSasUrl= _blobStorageService.GetBlobSasUrl(restaurant?.LogoUrl!);
+        return restaurantDto;
     }
 }

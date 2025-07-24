@@ -14,6 +14,8 @@ using Restaurants.Domain.Interfaces;
 using Restaurants.Infrastructure.Authorization.Services;
 using Restaurants.Infrastructure.Authorization.Requirements.MinimumAge;
 using Restaurants.Infrastructure.Authorization.Requirements.CreatedMultipleRestaurants;
+using Restaurants.Infrastructure.Configuration;
+using Restaurants.Infrastructure.Storage;
 
 namespace Restaurants.Infrastructure.Extensions;
 
@@ -53,5 +55,9 @@ public static class ServiceCollectionExtension
         services.AddScoped<IRestaurantsRepository,RestaurantsRepository>();
         services.AddScoped<IDishRepository,DishRepository>();
         services.AddScoped<IRestaurantAuthorizationService,RestaurantAuthorizationService>();
+
+        //BlobStorage Configuration
+        services.Configure<BlobStorageSettings>(configuration.GetSection("BlobStorage"));
+        services.AddScoped<IBlobStorageService, BlobStorageService>();
     }
 }

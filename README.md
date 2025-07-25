@@ -5,7 +5,7 @@ A modular and scalable **ASP.NET Core 8 Web API** project built with **Clean Arc
 ---
 
 ![.NET Version](https://img.shields.io/badge/.NET-8.0-blue)
-![Build](https://github.com/AboubacarSow/Restaurants/actions/workflows/dotnet.yml/badge.svg)
+![Build](https://github.com/AboubacarSow/Restaurants/actions/workflows/main.yml/badge.svg)
 ![License](https://img.shields.io/github/license/AboubacarSow/Restaurants)
 ![Azure](https://img.shields.io/badge/Deployed-Azure-blue)
 

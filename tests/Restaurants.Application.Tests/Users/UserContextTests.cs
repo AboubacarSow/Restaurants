@@ -59,7 +59,7 @@ public class UserContextTests
             new ("DateOfBirth",dateOfBirth.ToString("yyyy-MM-dd")),
         };
         var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "Test"));
-        httpContextAccessorMock.Setup(h => h.HttpContext).Returns((HttpContext)null);
+        httpContextAccessorMock.Setup(h => h.HttpContext).Returns((HttpContext?)null);
 
         var userContext= new UserContext(httpContextAccessorMock.Object);
         //Act

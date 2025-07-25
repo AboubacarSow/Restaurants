@@ -10,6 +10,7 @@ using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Users;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories;
+using Restaurants.Infrastructure.Seeders;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
@@ -21,6 +22,7 @@ public class RestaurantsControllerTests :IClassFixture<WebApplicationFactory<Pro
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IRestaurantsRepository> _restaurantsRepositoryMock = new();
     private readonly Mock<IUserContext> _userContextMock = new();
+    private readonly Mock<IRestaurantConfig> _restaurantSeederMock= new();  
     public RestaurantsControllerTests(WebApplicationFactory<Program> factory)
     {
         var currentUser = new CurrentUser("12", "test@test.com", ["Admin"], "German", null);
@@ -32,7 +34,13 @@ public class RestaurantsControllerTests :IClassFixture<WebApplicationFactory<Pro
                 services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
                 services.Replace(ServiceDescriptor.Scoped(typeof(IRestaurantsRepository),
                     _ => _restaurantsRepositoryMock.Object));
-                services.AddSingleton(_userContextMock.Object);
+
+                services.Replace(ServiceDescriptor.Scoped(typeof(IRestaurantConfig),
+                    _ => _restaurantSeederMock.Object));
+
+
+                services.AddSingleton(implementationInstance: _userContextMock.Object);
+
             });
         });
 

@@ -62,7 +62,7 @@ public class UpdateRestaurantCommandHandlerTests
         _restaurantsRepository.Setup(r=> r.GetOneRestaurantByIdAsync(restaurantId,true))
                                 .ReturnsAsync(restaurant);
 
-        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Admin"], null, null);
+        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Admin"], null!, null);
         _userContext.Setup(u=>u.GetCurrentUser())
             .Returns(currentUser);
 
@@ -91,7 +91,7 @@ public class UpdateRestaurantCommandHandlerTests
         _restaurantsRepository.Setup(r => r.GetOneRestaurantByIdAsync(restaurantId, true))
             .ReturnsAsync((Restaurant?)null);
 
-        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Admin"], null, null);
+        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Admin"], null!, null);
         _userContext.Setup(u => u.GetCurrentUser())
             .Returns(currentUser);
 
@@ -101,7 +101,7 @@ public class UpdateRestaurantCommandHandlerTests
         //Assert
 
         await action.Should().ThrowAsync<NotFoundException>()
-            .WithMessage($"Restaurant with id: {restaurantId} doesn't exist");
+            .WithMessage($"Restaurant with id: {restaurantId} does not exist");
         
     }
     [Fact]
@@ -120,7 +120,7 @@ public class UpdateRestaurantCommandHandlerTests
             .ReturnsAsync((restaurant));
 
         //retreiving user
-        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Owner"], null, null);
+        var currentUser = new CurrentUser("owner-id", "test@gmail", ["Owner"], null!, null);
         _userContext.Setup(u => u.GetCurrentUser())
             .Returns(currentUser);
 

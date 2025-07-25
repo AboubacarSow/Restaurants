@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Restaurants.API.Controllers;
 
 [ApiController]
+[ApiExplorerSettings(GroupName ="v1")]
 [Route("api/identity")]
 public class IdentityController(IMediator _mediator) : ControllerBase
 {

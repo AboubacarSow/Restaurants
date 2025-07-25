@@ -22,6 +22,29 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s =>
         {
+            s.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Restaurants API",
+                Version = "v1",
+                Description = @"A RESTful Web API for managing restaurants and their associated data.
+
+                    This API provides endpoints to:
+                    - Retrieve the list of restaurants (public access)
+                    - Search, filter, and paginate restaurant results
+                    - Upload and manage logo images for restaurants
+                    - Perform create, update, and delete operations (requires authentication)
+
+                    Versioning is supported via URL path (e.g. /api/v1/restaurants), enabling backward-compatible evolution of the API.
+
+                    This API is intended for consumption by web and mobile clients. Role-based authorization is enforced where applicable.",
+                Contact = new OpenApiContact
+                {
+                    Email = "aboubacarsow2004@gmail.com",
+                    Name = "ABOUBACAR SOW",
+                }
+            });
+
+
             s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
             {
                 Type = SecuritySchemeType.Http,

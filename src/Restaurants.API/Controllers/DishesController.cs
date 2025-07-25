@@ -14,6 +14,7 @@ namespace Restaurants.API.Controllers;
 
 [ApiController]
 [Route("api/restaurants/{restaurantId}/dishes")]
+[ApiExplorerSettings(GroupName = "v1")]
 public class DishesController(IMediator _mediator) : ControllerBase
 {
     [HttpPost]

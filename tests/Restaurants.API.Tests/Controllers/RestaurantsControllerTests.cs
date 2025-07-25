@@ -9,6 +9,7 @@ using Moq;
 using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Users;
 using Restaurants.Domain.Entities;
+using Restaurants.Domain.Entities.RequestFeatures;
 using Restaurants.Domain.Repositories;
 using Restaurants.Infrastructure.Seeders;
 using System.Net.Http.Json;
@@ -51,9 +52,39 @@ public class RestaurantsControllerTests :IClassFixture<WebApplicationFactory<Pro
     {
       //Arrange
       var client= _factory.CreateClient();
+
+        var restaurants = new List<Restaurant>()
+        {
+            new ()
+            {
+                Id = 1,
+                Name = "Test",
+                Description = "Test description"
+            },
+            new ()
+            {
+                Id = 2,
+                Name = "Test",
+                Description = "Test description"
+            },new ()
+            {
+                Id = 3,
+                Name = "Test",
+                Description = "Test description"
+            },new ()
+            {
+                Id = 4,
+                Name = "Test",
+                Description = "Test description"
+            },
+
+        };
+        var restaurantsWithPagedList = PagedList<Restaurant>.ToPagedList(restaurants, 10, 1);
+         _restaurantsRepositoryMock.Setup(r => r.GetAllWithMatchingAsync(null, 10, 1, null, 0, false))
+            .ReturnsAsync(restaurantsWithPagedList);
         //Act
 
-        var result = await client.GetAsync("/api/restaurants?trackChanges=false&sortDirection=0&pageSize=10&pageNumber=5");
+        var result = await client.GetAsync("/api/restaurants?trackChanges=false&sortDirection=0&pageSize=10&pageNumber=1");
 
         //Assert
         result.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

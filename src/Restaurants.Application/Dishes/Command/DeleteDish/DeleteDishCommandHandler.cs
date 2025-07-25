@@ -7,7 +7,7 @@ using Restaurants.Domain.Repositories;
 
 namespace Restaurants.Application.Dishes.Command.DeleteDish;
 
-public class DeleteDishCommandHandler(ILogger<DeleteDishCommandHandler> _logger, IMapper _mapper,
+public class DeleteDishCommandHandler(ILogger<DeleteDishCommandHandler> _logger,
     IDishRepository _dishRepository,IRestaurantsRepository _restaurantsRepository) : IRequestHandler<DeleteDishCommand>
 {
     public async Task Handle(DeleteDishCommand request, CancellationToken cancellationToken)
